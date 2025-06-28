@@ -147,3 +147,42 @@ if (lastQuote) {
 } else {
   showRandomQuote();
 }
+
+function fetchServerQuotes() {
+    return fetch('https://dummyjson.com/quotes')
+        .then(res => {
+            if (!res.ok) throw new Error('Fetch failed');
+            return res.json();
+        })
+        .then(data => data.quotes.map(q => ({
+            text: q.quote,     // ✅ Corrected property name
+            category: q.author
+        })));
+}
+
+// Poll every 30 seconds
+syncWithServer(); //initail sync with server
+setInterval(syncWithServer, 20000);
+
+async function syncWithServer() {
+    try {
+        const serverQuotes = await fetchServerQuotes();
+        const localQuotes = JSON.parse(localStorage.getItem('quotes')) || [];
+
+        // if different lengths or content, overwrite the server data
+        if (JSON.stringify(serverQuotes) != JSON.stringify(localQuotes)) {
+            localStorage.setItem('quotes', JSON.stringify(serverQuotes));
+            quotes = serverQuotes;
+            showNotification('Quotes have been updated from the server.');
+        }
+    } catch (err) {
+        console.error('Sync error:', err);
+    }
+}
+
+function showNotification(message) {
+    const notif = document.getElementById('notification');
+    notif.textContent = message;
+    notif.style.display = 'block';
+    setTimeout(()=>notif.style.display='none', 5000)
+}
