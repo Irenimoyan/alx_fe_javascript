@@ -149,7 +149,7 @@ if (lastQuote) {
 }
 
 function fetchQuotesFromServer() {
-    return fetch('https://dummyjson.com/quotes')
+    return fetch("https://jsonplaceholder.typicode.com/posts")
         .then(res => {
             if (!res.ok) throw new Error('Fetch failed');
             return res.json();
@@ -166,7 +166,7 @@ setInterval(syncWithServer, 20000);
 
 async function syncWithServer() {
     try {
-        const serverQuotes = await fetchQuoteFr();
+        const serverQuotes = await fetchQuotesFromServer();
         const localQuotes = JSON.parse(localStorage.getItem('quotes')) || [];
 
         // if different lengths or content, overwrite the server data
