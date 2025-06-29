@@ -131,7 +131,8 @@ function fetchQuotesFromServer() {
         return response.json();
     })
     .then(data => {
-        console.log('Quote posted successfully:', data);
+      console.log('Quote posted successfully:', data);
+      console.log("Quotes synced with server!");
     })
     .catch(error => {
         console.error('Sync error:', error);
