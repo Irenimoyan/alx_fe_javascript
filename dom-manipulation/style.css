@@ -48,7 +48,7 @@ body {
     border: 1px solid #ddd;
   }
   
-  input[type="text"] {
+  input[type="text"],#categoryFilter {
     width: calc(100% - 24px);
     padding: 10px;
     margin: 5px 0;
@@ -56,8 +56,9 @@ body {
     border: 1px solid #ccc;
   }
   
-  .filter {
+.filter {
     text-align: center;
     margin-bottom: 20px;
+    color: lightslategray;
   }
   
