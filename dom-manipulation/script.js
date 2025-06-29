@@ -134,6 +134,21 @@ function startServerSync() {
     });
   }, 30000); // Every 30s
 }
+async function syncWithServer() {
+  try {
+    const serverQuotes = await fetchServerQuotes();
+    const localQuotes = JSON.parse(localStorage.getItem('quotes')) || [];
+
+    // If different lengths or contents, overwrite with server data
+    if (JSON.stringify(serverQuotes) !== JSON.stringify(localQuotes)) {
+      localStorage.setItem('quotes', JSON.stringify(serverQuotes));
+      quotes = serverQuotes;
+      showNotification('Quotes have been updated from server.');
+    }
+  } catch (err) {
+    console.error('Sync error:', err);
+  }
+}
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOM fully loaded and parsed");
   document.getElementById("newQuote").addEventListener("click", showRandomQuote);
