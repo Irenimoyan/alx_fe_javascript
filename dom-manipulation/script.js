@@ -1,4 +1,4 @@
-const SERVER_URL = "https://dummyjson.com/quotes"; // Simulated API
+const SERVER_URL = "https://jsonplaceholder.typicode.com/posts"; // Simulated API
 
 let quotes = JSON.parse(localStorage.getItem('quotes')) || [];
 const quoteDisplay = document.getElementById("quoteDisplay");
