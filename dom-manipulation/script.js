@@ -54,14 +54,18 @@ function createAddQuoteForm() {
 
 
 function addQuote() {
-  const text = document.getElementById("newQuoteText").value.trim();
-  const category = document.getElementById("newQuoteCategory").value.trim();
-  if (!text || !category) return alert("Please fill both fields.");
+  const quoteText = document.getElementById("newQuoteText").value.trim();
+  const quoteCategory = document.getElementById("newQuoteCategory").value.trim();
+  if (quoteText && quoteCategory) {
+    const quote = { text: quoteText, category: quoteCategory };
+    quotes.push(quote);
+    saveQuotes();
+    renderQuotes();
+    populateCategories();
+    postQuoteToServer(quote); // <-- Send to server
+}
 
-  quotes.push({ text, category });
-  saveQuotes();
-  populateCategories();
-  filterQuotes();
+    
 }
 
 function saveQuotes() {
@@ -115,14 +119,23 @@ function importFromJsonFile(event) {
 
 // Server Sync Simulation
 function fetchQuotesFromServer() {
-  return fetch("SERVER_URL")
-    .then(res => res.json())
-    .then(data =>
-      data.slice(0, 5).map(item => ({
-        text: item.title,
-        category: "Server"
-      }))
-    );
+      return fetch(SERVER_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(quote)
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Failed to sync with server');
+        return response.json();
+    })
+    .then(data => {
+        console.log('Quote posted successfully:', data);
+    })
+    .catch(error => {
+        console.error('Sync error:', error);
+    });
 }
 
 function startServerSync() {
