@@ -1,4 +1,4 @@
-const SERVER_URL = "'https://dummyjson.com/quotes'"; // Simulated API
+const SERVER_URL = "https://dummyjson.com/quotes"; // Simulated API
 
 let quotes = JSON.parse(localStorage.getItem('quotes')) || [];
 const quoteDisplay = document.getElementById("quoteDisplay");
@@ -51,6 +51,7 @@ function createAddQuoteForm() {
 
   document.body.appendChild(formContainer);
 }
+
 
 function addQuote() {
   const text = document.getElementById("newQuoteText").value.trim();
@@ -113,8 +114,8 @@ function importFromJsonFile(event) {
 }
 
 // Server Sync Simulation
-function fetchServerQuotes() {
-  return fetch(SERVER_URL)
+function fetchQuotesFromServer() {
+  return fetch("SERVER_URL")
     .then(res => res.json())
     .then(data =>
       data.slice(0, 5).map(item => ({
@@ -126,10 +127,17 @@ function fetchServerQuotes() {
 
 function startServerSync() {
   setInterval(() => {
-    fetchServerQuotes().then(serverQuotes => {
+    fetchQuotesFromServer().then(serverQuotes => {
       quotes = [...serverQuotes, ...quotes];
       saveQuotes();
       populateCategories();
     });
   }, 30000); // Every 30s
 }
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("DOM fully loaded and parsed");
+  document.getElementById("newQuote").addEventListener("click", showRandomQuote);
+  createAddQuoteForm();
+  populateCategories();
+  loadQuotes();
+});
