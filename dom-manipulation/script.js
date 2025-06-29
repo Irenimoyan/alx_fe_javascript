@@ -147,7 +147,7 @@ function startServerSync() {
     });
   }, 30000); // Every 30s
 }
-async function syncWithServer() {
+async function syncQuotes() {
   try {
     const serverQuotes = await fetchServerQuotes();
     const localQuotes = JSON.parse(localStorage.getItem('quotes')) || [];
